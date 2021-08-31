@@ -2,16 +2,16 @@
 
 ***[Note] This hands-on is for NVIDIA Jetson nano, but with only a few lines of code, it works smoothly on NVIDIA Jetson Xavier and Raspberry Pi.***
 
-This hands-on lab starts with Machine Learning(Hereinafter referred to as ML) steps such as data preparing, model training, and model compiling, and then deals with creating and deploying Greengrass v2 components and recipes from scratch on NVIDIA Jetson nano devices. Each folder can be run independently, and you can omit ML Hands-on if you have already compiled models.
+This hands-on lab starts with Machine Learning(Hereinafter referred to as ML) steps such as data preparing, model training, and model compiling, and then deals with creating and deploying Greengrass v2 components and recipes from scratch on NVIDIA Jetson nano devices. Each folder can be run independently, and you can omit ML Hands-on if you have already your own compiled models.
 
 - `sm-model-train-compile`: ML part (Amazon SageMaker)
 - `ggv2-deploy-on-device`: IoT part (AWS IoT Greengrass 2.0)
 
 ## 1. ML Part: Compile your ML model using Pytorch Framework and Amazon SageMaker
 
-In the ML part, you can freely prepare your own data, organize a folder, and execute the code, so that even ML beginners can easily train/compile your own model. Does your data exceed gigabytes? In consideration of large data, PyTorch DDP-based distributed learning was also implemented.
+In the ML part, you can freely prepare your own data, organize a folder, and execute the code, so that even ML beginners can easily train/compile your own model. Does your data exceed gigabytes? In consideration of large data, PyTorch DDP-based distributed training was also implemented.
 
-Let's take an example of raw image folder .
+Let's take an example of raw image folder.
 
 **Example 1)** Training a dog and cat classification model
 ```
@@ -51,7 +51,7 @@ All the codes work normally, but there are many parts that need to be changed ma
 - See [README_jetson_nano_setup.md](README_jetson_nano_setup.md)
 
 ### 1. Optional: Simple Test
-```
+```bash
 $ cd artifacts
 
 # Single image inference
@@ -72,7 +72,7 @@ $ python3 flask_camera_dlr.py
 ```
 
 ### 2.2. Optional, but Recommended: Shell Script Test
-```
+```bash
 $ cd artifacts
 $ chmod +x run.sh run_flask.sh
 
@@ -92,38 +92,96 @@ $ ./run_flask.sh -i [YOUR-DEVICE-IP] -p [YOUR-PORT]
 [Caution] This method is very insecure and not suitable for production. Please refer to [Install AWS IoT Greengrass Core software with AWS IoT fleet provisioning](https://docs.aws.amazon.com/greengrass/v2/developerguide/fleet-provisioning.html) for more appropriate settings.
 
 1. Install AWS CLI V2 (Linux ARM)
-```
-curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-sudo ./aws/install
+```bash
+$ curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
+$ unzip awscliv2.zip
+$ sudo ./aws/install
 ```
 
 2. Install JDK
-```
-sudo apt install default-jdk
-java -version
+```bash
+$ sudo apt install default-jdk
+$ java -version
 ```
 
 3. AWS configure and access key, secret key environment variable setting
-```
-aws configure # Set up your credentials
-export AWS_ACCESS_KEY_ID=[YOUR-KEY-ID]
-export AWS_SECRET_ACCESS_KEY=[YOUR-SECRET-ACCESS-KEY]
+```bash
+$ aws configure # Set up your credentials
+$ export AWS_ACCESS_KEY_ID=[YOUR-KEY-ID]
+$ export AWS_SECRET_ACCESS_KEY=[YOUR-SECRET-ACCESS-KEY]
 ```
 
 4. Download and install AWS IoT Greengrass V2 core software
 - See https://docs.aws.amazon.com/greengrass/v2/developerguide/quick-installation.html
 
-
 ### 2.4. Register AWS IoT Greengrass Component 
 1. Modify `config.json` first.
 2. Run `create_gg_component.sh`.
 
-```
+```bash
 $ ./create_gg_component.sh
 ```
 
+## Experiments
+The experimental results below are not rigorous. Please refer only to check the approximate FPS(Frames Per Second).
+- Model: MobileNet-v2 Image Classification
+- Framework: PyTorch 1.6.0 	
+- CSI Camera Input size: 1280 x 720 x 3 
+- DLR Runtime Version: 1.9.0
+  
+Overclocking will speed it up by about 4-5 frames. But, it requires a sufficient cooling system.
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th colspan=2>Vanilla PyTorch (Built-in OpenCV 4.1.1)</th>
+            <th colspan=2>Compiled w/ SageMaker Neo (Built-in OpenCV 4.1.1)</th>
+            <th colspan=2>Compiled w/ SageMaker Neo (Build OpenCV 4.5.3 from scratch)</th> 
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>CPU/GPU</td>
+            <td>CPU</td>
+            <td>GPU</td>
+            <td>CPU</td>
+            <td>GPU</td>
+            <td>CPU</td>
+            <td>GPU</td>
+        </tr>
+        <tr>
+            <td>Model Loading Time</td>
+            <td>~50 secs</td>
+            <td>~90 secs</td>
+            <td>2~3 secs</td>
+            <td>~40 secs</td>
+            <td>2~3 secs</td>  
+            <td>~40 secs</td>   
+        </tr>
+        <tr>
+            <td>FPS</td>
+            <td>0.16~0.18</td>
+            <td>8~9</td>
+            <td>5~6</td>
+            <td>16~17</td>
+            <td>8~10</td>
+            <td>23~25</td>
+        </tr>        
+    </tbody>
+</table>
 
+<table>
+    <tbody>
+        <tr>
+            <td><img src='imgs/experiments-1.png'></td>
+            <td><img src='imgs/experiments-2.png'></td>
+        </tr>
+        <tr>
+            <td>Image classification w/ SageMaker Neo<br>(GPU enabled, Gstreamer on OpenCV 4.5.3)</td>
+            <td>Image classification w/ SageMaker Neo<br>(GPU disenabled, Gstreamer on OpenCV 4.5.3)</td>
+        </tr>
+    </tbody>
+</table>
 
 ## License Summary
 

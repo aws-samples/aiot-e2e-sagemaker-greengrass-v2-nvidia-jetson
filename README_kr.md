@@ -25,7 +25,7 @@ raw
 ```
 raw
 ├── brown_abnormal_chinese: 갈색 제품에 한자가 적혀 있는 불량 박스입니다.
-├── brown_abnormal_korean:갈색 제품에 한글이 적혀 있는 불량 박스입니다.
+├── brown_abnormal_korean: 갈색 제품에 한글이 적혀 있는 불량 박스입니다.
 ├── brown_normal_chinese: 갈색 제품에 한자가 적혀 있는 양품 박스입니다.
 ├── brown_normal_korean: 갈색 제품에 한글이 적혀 있는 양품 박스입니다.
 ├── no_box: 박스가 없습니다. 하지만, 때때로 박스 일부분들을 볼 수 있습니다.
@@ -38,7 +38,6 @@ Note: 이 데이터셋은 AWS IoT Smart Factory 데모를 준비하기 위해 �
 Example 2의 데이터셋 샘플은 raw 데이터셋 폴더(`ggv2-deploy-on-device/raw`)를 참고하시기 바랍니다.
 - Reference: [AWS Smart Factory with Turck Korea](https://www.youtube.com/watch?v=R0sMMphzOhw)
 
-
 ## 2. IoT Part: On-Device ML Inference with AWS IoT Greengrass 2.0
 
 컴파일된 모델을 ML 파트에서 NVIDIA Jetson nano로 직접 복사하여 추론할 수 있지만 실제 프로덕션 환경에서는 한 번에 여러 디바이스들을 등록해야 합니다. 이 때, Greengrass-v2 컴포넌트를 등록하면 여러 에지 디바이스에 편리하게 배포할 수 있습니다. 향후 이를 기반으로 추론 데이터를 MQTT에 게시하여 Model/Data Drift를 감지하는 것도 가능합니다.
@@ -46,7 +45,7 @@ Example 2의 데이터셋 샘플은 raw 데이터셋 폴더(`ggv2-deploy-on-devi
 모든 코드는 정상적으로 동작하지만 수동 작업이 많기 때문에 향후 CDK(Cloud Development Kit)를 통한 자동화를 권장합니다.
 
 ### 1. Optional: Simple Test
-```
+```bash
 $ cd artifacts
 
 # Single image inference
@@ -67,7 +66,7 @@ $ python3 flask_camera_dlr.py
 ```
 
 ### 2.2. Optional, but Recommended: Shell Script Test
-```
+```bash
 $ cd artifacts
 $ chmod +x run.sh run_flask.sh
 
@@ -84,26 +83,26 @@ $ ./run_flask.sh -i [YOUR-DEVICE-IP] -p [YOUR-PORT]
 
 ### 2.3. AWS IoT Greengrass setup (if you have not done)
 
-[Caution] This method is very insecure and not suitable for production. Please refer to [Install AWS IoT Greengrass Core software with AWS IoT fleet provisioning](https://docs.aws.amazon.com/greengrass/v2/developerguide/fleet-provisioning.html) for more appropriate settings.
+[주의] 이 방법은 보안에 취약하고 프로더션에 적합하지 않습니다. 더 적절한 설정은 [AWS IoT 플릿 프로비저닝으로 AWS IoT Greengrass Core 소프트웨어 설치](https://docs.aws.amazon.com/greengrass/v2/developerguide/fleet-provisioning.html)를 참조하세요.
 
 1. Install AWS CLI V2 (Linux ARM)
-```
-curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-sudo ./aws/install
+```bash
+$ curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
+$ unzip awscliv2.zip
+$ sudo ./aws/install
 ```
 
 2. Install JDK
-```
-sudo apt install default-jdk
-java -version
+```bash
+$ sudo apt install default-jdk
+$ java -version
 ```
 
 3. AWS configure and access key, secret key environment variable setting
-```
-aws configure # Set up your credentials
-export AWS_ACCESS_KEY_ID=[YOUR-KEY-ID]
-export AWS_SECRET_ACCESS_KEY=[YOUR-SECRET-ACCESS-KEY]
+```bash
+$ aws configure # Set up your credentials
+$ export AWS_ACCESS_KEY_ID=[YOUR-KEY-ID]
+$ export AWS_SECRET_ACCESS_KEY=[YOUR-SECRET-ACCESS-KEY]
 ```
 
 4. Download and install AWS IoT Greengrass V2 core software
@@ -114,9 +113,70 @@ export AWS_SECRET_ACCESS_KEY=[YOUR-SECRET-ACCESS-KEY]
 1. Modify `config.json` first.
 2. Run `create_gg_component.sh`.
 
-```
+```bash
 $ ./create_gg_component.sh
 ```
+
+## Experiments
+아래의 실험 결과는 엄밀하지 않습니다. 대략적인 FPS(Frames Per Second)만 확인해 주세요.
+- Model: MobileNet-v2 Image Classification
+- Framework: PyTorch 1.6.0
+- CSI Camera Input size: 1280 x 720 x 3 
+- DLR Runtime Version: 1.9.0
+
+오버클러킹을 수행하면 약 4~5프레임이 향상됩니다. 하지만 오버클러킹은 충분한 쿨링 시스템을 갖춰야 합니다.
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th colspan=2>Vanilla PyTorch (Built-in OpenCV 4.1.1)</th>
+            <th colspan=2>Compiled w/ SageMaker Neo (Built-in OpenCV 4.1.1)</th>
+            <th colspan=2>Compiled w/ SageMaker Neo (Build OpenCV 4.5.3 from scratch)</th> 
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>CPU/GPU</td>
+            <td>CPU</td>
+            <td>GPU</td>
+            <td>CPU</td>
+            <td>GPU</td>
+            <td>CPU</td>
+            <td>GPU</td>
+        </tr>
+        <tr>
+            <td>Model Loading Time</td>
+            <td>~50 secs</td>
+            <td>~90 secs</td>
+            <td>2~3 secs</td>
+            <td>~40 secs</td>
+            <td>2~3 secs</td>  
+            <td>~40 secs</td>   
+        </tr>
+        <tr>
+            <td>FPS</td>
+            <td>0.16~0.18</td>
+            <td>8~9</td>
+            <td>5~6</td>
+            <td>16~17</td>
+            <td>8~10</td>
+            <td>23~25</td>
+        </tr>        
+    </tbody>
+</table>
+
+<table>
+    <tbody>
+        <tr>
+            <td><img src='imgs/experiments-1.png'></td>
+            <td><img src='imgs/experiments-2.png'></td>
+        </tr>
+        <tr>
+            <td>Image classification w/ SageMaker Neo<br>(GPU enabled, Gstreamer on OpenCV 4.5.3)</td>
+            <td>Image classification w/ SageMaker Neo<br>(GPU disenabled, Gstreamer on OpenCV 4.5.3)</td>
+        </tr>
+    </tbody>
+</table>
 
 ## License Summary
 
