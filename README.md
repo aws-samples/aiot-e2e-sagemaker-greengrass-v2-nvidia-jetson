@@ -47,6 +47,9 @@ You can directly copy the compiled model from the ML part to NVIDIA Jetson nano 
 
 All the codes work normally, but there are many parts that need to be changed manually, so automation through CDK is recommended in the future.
 
+### 0. NVIDIA Jetson Nano setup (if you have not done)
+- See [README_jetson_nano_setup.md](README_jetson_nano_setup.md)
+
 ### 1. Optional: Simple Test
 ```
 $ cd artifacts
