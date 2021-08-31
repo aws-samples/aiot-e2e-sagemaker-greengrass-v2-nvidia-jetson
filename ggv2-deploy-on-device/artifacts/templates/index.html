@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<style>
+  .button1 {
+    background-color: white;
+    color: black;
+    display: inline-block;
+    padding: 6px 24px;
+    font-size: 20px;
+    border: 2px solid #555555;
+  }
+
+  .button1:hover {
+    background-color: #555555;
+    display: inline-block;
+    padding: 6px 24px;
+    font-size: 20px;
+    color: white;
+  }
+</style>
+
+<head>
+  <title>AWS Demo</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8  offset-lg-2">
+        <form method="post" action="{{ url_for('tasks') }}">
+          <input type="submit" class="button1" value="Capture" size="20" name="capture" />
+        </form>
+        <img src="{{ url_for('video_feed') }}"
+          style="margin-top: auto; margin-left: auto; margin-right: auto; margin-bottom: auto; display: block;" />
+
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

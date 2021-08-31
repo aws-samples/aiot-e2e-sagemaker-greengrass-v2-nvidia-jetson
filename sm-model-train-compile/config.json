@@ -1,0 +1,26 @@
+{
+    "Project": {
+        "Name": "MLInferenceFromScratch",
+        "Account": "12345*******",
+        "Region": "us-east-1",
+        "Profile": "ggv2-demo"
+    },
+    "Component": {
+        "ComponentName": "com.example.ImgClassification",
+        "ComponentVersion": "1.0.0",
+        "SendMessage": "True",
+        "Topic": "ml/example/imgclassification2",
+        "PredictionIntervalSecs": 5,
+        "Timeout": 10
+    },
+    "Artifacts": {
+        "S3Bucket": "sagemaker-us-east-1-143656149352",
+        "S3Prefix": "ggv2/artifacts",
+        "ZipArchiveName": "my-model"
+    },
+    "Parameters": {
+        "ScoreThreshold": 0.25,
+        "MaxNumClasses": 3,
+        "ModelInputShape": "(224,224)"
+    }
+}

@@ -1,0 +1,57 @@
+{
+    "RecipeFormatVersion": "2020-01-25",
+    "ComponentName": "com.bioplus.ImgClassification",
+    "ComponentVersion": "1.2.0",
+    "ComponentDescription": "Custom Image classification inference component using DLR.",
+    "ComponentPublisher": "AWS",
+    "ComponentConfiguration": {
+        "DefaultConfiguration": {
+            "accessControl": {
+                "aws.greengrass.ipc.mqttproxy": {
+                    "com.example.Pub:publisher:1": {
+                        "policyDescription": "Allows access to publish to ml/bioplus/imgclassification topic.",
+                        "operations": [
+                            "aws.greengrass#PublishToIoTCore"
+                        ],
+                        "resources": [
+                            "ml/bioplus/imgclassification"
+                        ]
+                    }
+                }
+            },
+            "UseGPU": "0",
+            "DeviceIP": "192.168.200.200",
+            "Port": "1234"
+        }
+    },
+    "Manifests": [
+        {
+            "Platform": {
+                "os": "linux",
+                "architecture": "aarch64"
+            },
+            "Lifecycle": {
+                "Install": {
+                    "RequiresPrivilege": true,
+                    "Script": "/bin/bash {artifacts:decompressedPath}/my-model/install.sh",
+                    "timeout": "900"
+                },
+                "setEnv": {
+                    "MODEL_CPU_DIR": "{artifacts:decompressedPath}/my-model/model_cpu",
+                    "MODEL_GPU_DIR": "{artifacts:decompressedPath}/my-model/model_gpu",
+                    "SAMPLE_IMAGE_DIR": "{artifacts:decompressedPath}/my-model/sample_images"
+                },
+                "Run": {
+                    "RequiresPrivilege": true,
+                    "script": "/bin/bash {artifacts:decompressedPath}/my-model/run_flask.sh -i {configuration:/DeviceIP} -p {configuration:/Port}"
+                }
+            },
+            "Artifacts": [
+                {
+                    "URI": "s3://sagemaker-us-east-1-454396267554/ggv2/artifacts/my-model.zip",
+                    "Unarchive": "ZIP"
+                }
+            ]
+        }
+    ]
+}
