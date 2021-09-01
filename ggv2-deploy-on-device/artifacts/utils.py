@@ -12,17 +12,6 @@ import config_utils
 import IPCUtils as ipc_utils
 
 
-# label_map = {
-#     0: 'brown_abnormal_chinese',
-#     1: 'brown_abnormal_korean',
-#     2: 'brown_normal_chinese',
-#     3: 'brown_normal_korean',
-#     4: 'no_box',
-#     5: 'red_abnormal',
-#     6: 'red_normal'
-#  }
-
-
 def softmax(x):
     x_exp = np.exp(x - np.max(x))
     f_x = x_exp / np.sum(x_exp)
@@ -188,8 +177,4 @@ def demo_sample_images(model):
             idx = 0
             print(idx)
 
-        # Append the message to the log file.
-        #with open(log_filepath, 'a') as f:
-        #    print(payload, file=f)
-        
         time.sleep(config_utils.DEFAULT_PREDICTION_INTERVAL_SECS)

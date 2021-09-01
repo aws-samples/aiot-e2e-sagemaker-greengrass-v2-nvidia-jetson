@@ -1,7 +1,7 @@
 {
     "RecipeFormatVersion": "2020-01-25",
     "ComponentName": "com.bioplus.ImgClassification",
-    "ComponentVersion": "1.2.0",
+    "ComponentVersion": "1.0.0",
     "ComponentDescription": "Custom Image classification inference component using DLR.",
     "ComponentPublisher": "AWS",
     "ComponentConfiguration": {
@@ -48,7 +48,7 @@
             },
             "Artifacts": [
                 {
-                    "URI": "s3://sagemaker-us-east-1-454396267554/ggv2/artifacts/my-model.zip",
+                    "URI": "s3://daekeun-test/ggv2/artifacts/my-model.zip",
                     "Unarchive": "ZIP"
                 }
             ]

@@ -44,7 +44,10 @@ Example 2의 데이터셋 샘플은 raw 데이터셋 폴더(`ggv2-deploy-on-devi
 
 모든 코드는 정상적으로 동작하지만 수동 작업이 많기 때문에 향후 CDK(Cloud Development Kit)를 통한 자동화를 권장합니다.
 
-### 1. Optional: Simple Test
+### 2.0. NVIDIA Jetson Nano setup (if you have not done)
+- [README_jetson_nano_setup.md](README_jetson_nano_setup.md)를 참조하세요.
+
+### 2.1. Optional: Simple Test
 ```bash
 $ cd artifacts
 
@@ -85,14 +88,14 @@ $ ./run_flask.sh -i [YOUR-DEVICE-IP] -p [YOUR-PORT]
 
 [주의] 이 방법은 보안에 취약하고 프로더션에 적합하지 않습니다. 더 적절한 설정은 [AWS IoT 플릿 프로비저닝으로 AWS IoT Greengrass Core 소프트웨어 설치](https://docs.aws.amazon.com/greengrass/v2/developerguide/fleet-provisioning.html)를 참조하세요.
 
-1. Install AWS CLI V2 (Linux ARM)
+1. AWS CLI V2 (Linux ARM) 를 설치하세요.
 ```bash
 $ curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
 $ unzip awscliv2.zip
 $ sudo ./aws/install
 ```
 
-2. Install JDK
+2. JDK를 설치하세요.
 ```bash
 $ sudo apt install default-jdk
 $ java -version
@@ -105,18 +108,22 @@ $ export AWS_ACCESS_KEY_ID=[YOUR-KEY-ID]
 $ export AWS_SECRET_ACCESS_KEY=[YOUR-SECRET-ACCESS-KEY]
 ```
 
-4. Download and install AWS IoT Greengrass V2 core software
-- See https://docs.aws.amazon.com/greengrass/v2/developerguide/quick-installation.html
-
+4. AWS IoT Greengrass V2 core software를 다운로드하고 설치하세요.
+-  참조: https://docs.aws.amazon.com/greengrass/v2/developerguide/quick-installation.html
 
 ### 2.4. Register AWS IoT Greengrass Component 
-1. Modify `config.json` first.
-2. Run `create_gg_component.sh`.
+1. `config.json`을 먼저 수정하세요.
+2. `create_gg_component.sh`를 실행하세요. 만약 Macbook에서 실행한다면 `create_gg_component_mac.sh`을 실행하세요.<br>
+   이 셀스크립트를 실행하면 `config.json` 설정에서 변경된 내용을 반영하여 로컬의 json recipe와 `artifacts/config_utils.py`을 자동으로 수정해 주고 `artifacts` 폴더의 파일을 zip으로 압축하여 여러분의 S3 버킷으로 업로드 후, 마지막으로 Greengrass 컴포넌트를 자동으로 등록합니다.
 
 ```bash
 $ ./create_gg_component.sh
 ```
 
+### 2.5. Deploy to your Edge devices
+컴포넌트가 등록되었다면 AWS UI나 Greengrass CLI로 쉽게 배포할 수 있습니다. 개발자 가이드를 참조해 주세요.
+- https://docs.aws.amazon.com/greengrass/v2/developerguide/manage-deployments.html.
+   
 ## Experiments
 아래의 실험 결과는 엄밀하지 않습니다. 대략적인 FPS(Frames Per Second)만 확인해 주세요.
 - Model: MobileNet-v2 Image Classification

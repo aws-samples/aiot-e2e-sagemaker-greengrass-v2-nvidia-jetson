@@ -47,10 +47,10 @@ You can directly copy the compiled model from the ML part to NVIDIA Jetson nano 
 
 All the codes work normally, but there are many parts that need to be changed manually, so automation through CDK is recommended in the future.
 
-### 0. NVIDIA Jetson Nano setup (if you have not done)
+### 2.0. NVIDIA Jetson Nano setup (if you have not done)
 - See [README_jetson_nano_setup.md](README_jetson_nano_setup.md)
 
-### 1. Optional: Simple Test
+### 2.1. Optional: Simple Test
 ```bash
 $ cd artifacts
 
@@ -116,12 +116,17 @@ $ export AWS_SECRET_ACCESS_KEY=[YOUR-SECRET-ACCESS-KEY]
 
 ### 2.4. Register AWS IoT Greengrass Component 
 1. Modify `config.json` first.
-2. Run `create_gg_component.sh`.
+2. Run `create_gg_component.sh`. If running on a Macbook, run `create_gg_component_mac.sh`.<br>
+   When this cell script is executed, the local json recipe and `artifacts/config_utils.py` are automatically modified by reflecting the changes made in the `config.json` setting, the files in the `artifacts` folder are compressed with zip, uploaded to the your S3 bucket, and finally the Greengrass component is automatically registered.
 
 ```bash
 $ ./create_gg_component.sh
 ```
 
+### 2.5. Deploy to your Edge devices
+Once the component is registered, it can be easily deployed via the AWS UI or IoT Greengrass CLI. Please refer to the developer guide.
+- https://docs.aws.amazon.com/greengrass/v2/developerguide/manage-deployments.html.
+  
 ## Experiments
 The experimental results below are not rigorous. Please refer only to check the approximate FPS(Frames Per Second).
 - Model: MobileNet-v2 Image Classification

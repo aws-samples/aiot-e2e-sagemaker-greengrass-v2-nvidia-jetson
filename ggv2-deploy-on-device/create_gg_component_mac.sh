@@ -51,11 +51,11 @@ OLD_RECIPE_JSON=$(ls ${COMPONENT_NAME}*.json)
 NEW_RECIPE_JSON=${COMPONENT_NAME}-${COMPONENT_VERSION}.json
 mv ${OLD_RECIPE_JSON} ${NEW_RECIPE_JSON}
 
-sed -i "s/\(\"UseGPU\"\)\(.*\)/\1: \"${USE_GPU}\",/g" ${NEW_RECIPE_JSON}
-sed -i "s/\(\"URI\"\)\(.*\)/\1: \"${S3_FILEPATH2}\",/g" ${NEW_RECIPE_JSON}
-sed -i "s/my-model/${ZIP_ARCHIVE_NAME}/g" ${NEW_RECIPE_JSON} 
-# sed -i "s/ml\/example\/imgclassification/${TOPIC2}/g" ${NEW_RECIPE_JSON} 
-sed -i "s/\(\"ComponentVersion\"\)\(.*\)/\1: \"${COMPONENT_VERSION}\",/g" ${NEW_RECIPE_JSON}
+sed -i "" "s/\(\"UseGPU\"\)\(.*\)/\1: \"${USE_GPU}\",/g" ${NEW_RECIPE_JSON}
+sed -i "" "s/\(\"URI\"\)\(.*\)/\1: \"${S3_FILEPATH2}\",/g" ${NEW_RECIPE_JSON}
+sed -i "" "s/my-model/${ZIP_ARCHIVE_NAME}/g" ${NEW_RECIPE_JSON} 
+# sed -i "" "s/ml\/example\/imgclassification/${TOPIC2}/g" ${NEW_RECIPE_JSON} 
+sed -i "" "s/\(\"ComponentVersion\"\)\(.*\)/\1: \"${COMPONENT_VERSION}\",/g" ${NEW_RECIPE_JSON}
 
 echo old json recipe: $OLD_RECIPE_JSON
 echo new json recipe: $NEW_RECIPE_JSON
@@ -66,15 +66,14 @@ echo .
 echo ==--------Config Utils---------==
 CONFIG_PY="artifacts/config_utils.py"
 
-sed -i "s/\(USE_GPU\)\(.*\)/\1 = ${USE_GPU}/g" ${CONFIG_PY}
-sed -i "s/\(SCORE_THRESHOLD\)\(.*\)/\1 = ${SCORE_THRESHOLD}/g" ${CONFIG_PY}
-sed -i "s/\(MAX_NO_OF_RESULTS\)\(.*\)/\1 = ${MAX_NUM_CLASSES}/g" ${CONFIG_PY}
-sed -i "s/\(SHAPE\)\(.*\)/\1 = ${MODEL_INPUT_SHAPE}/g" ${CONFIG_PY}
-sed -i "s/\(TIMEOUT\)\(.*\)/\1 = ${TIMEOUT}/g" ${CONFIG_PY}
-sed -i "s/\(DEFAULT_PREDICTION_INTERVAL_SECS\)\(.*\)/\1 = ${PREDICTION_INTERVAL_SECS}/g" ${CONFIG_PY}
-sed -i "s/\(ENABLE_SEND_MESSAGE\)\(.*\)/\1 = ${ENABLE_SEND_MESSAGE}/g" ${CONFIG_PY}
-# sed -i "s/\(TOPIC\)\(.*\)/\1 = \"${TOPIC2}\"/g" ${CONFIG_PY}
-
+sed -i "" "s/\(USE_GPU\)\(.*\)/\1 = ${USE_GPU}/g" ${CONFIG_PY}
+sed -i "" "s/\(SCORE_THRESHOLD\)\(.*\)/\1 = ${SCORE_THRESHOLD}/g" ${CONFIG_PY}
+sed -i "" "s/\(MAX_NO_OF_RESULTS\)\(.*\)/\1 = ${MAX_NUM_CLASSES}/g" ${CONFIG_PY}
+sed -i "" "s/\(SHAPE\)\(.*\)/\1 = ${MODEL_INPUT_SHAPE}/g" ${CONFIG_PY}
+sed -i "" "s/\(TIMEOUT\)\(.*\)/\1 = ${TIMEOUT}/g" ${CONFIG_PY}
+sed -i "" "s/\(DEFAULT_PREDICTION_INTERVAL_SECS\)\(.*\)/\1 = ${PREDICTION_INTERVAL_SECS}/g" ${CONFIG_PY}
+sed -i "" "s/\(ENABLE_SEND_MESSAGE\)\(.*\)/\1 = ${ENABLE_SEND_MESSAGE}/g" ${CONFIG_PY}
+# sed -i "" "s/\(TOPIC\)\(.*\)/\1 = \"${TOPIC2}\"/g" ${CONFIG_PY}
 echo .
 
 echo ==--------Compress Artifacts---------==
