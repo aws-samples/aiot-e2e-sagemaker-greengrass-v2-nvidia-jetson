@@ -2,7 +2,7 @@
 
 ### Author: Daekeun Kim (daekeun@)
 
-The instructions below assume that you have installed Jetpack 4.5.1. But even if the jetpack version is updated, the installation method won't change much.
+The instructions below assume that you have installed Jetpack 4.5.1. But even if the Jetpack version is updated, the installation method won't change much.
 
 ## 1. Prerequisites and Dependencies
 ```bash
@@ -12,6 +12,9 @@ sudo apt-get install libopenblas-dev
 
 # NVIDIA Jetpack's Python does not have built-in venv and pip by default
 sudo apt-get install python3-venv python3-pip libgoogle-glog-devsudo 
+
+# libnvinfer depends on TensorRT and CUDA version. If you install another version of jetpack in the future, you will need to change this line to the appropriate version.
+sudo apt-get install libnvinfer7=7.1.3-1+cuda10.2
 pip3 install -U pip testresources setuptools
 ```
 
