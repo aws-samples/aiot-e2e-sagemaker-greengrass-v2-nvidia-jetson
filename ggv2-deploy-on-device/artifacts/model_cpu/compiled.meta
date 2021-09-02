@@ -1,0 +1,34 @@
+{
+    "Requirements": {
+        "TargetPlatformOs": "LINUX",
+        "TargetPlatformArch": "ARM64",
+        "TargetDeviceType": "cpu"
+    },
+    "Compilation": {
+        "CreatedTime": 1628782078.425006
+    },
+    "Model": {
+        "Inputs": [
+            {
+                "name": "input0",
+                "shape": [
+                    1,
+                    3,
+                    224,
+                    224
+                ],
+                "dtype": "float32"
+            }
+        ],
+        "Outputs": [
+            {
+                "dtype": "float32",
+                "shape": [
+                    1,
+                    7
+                ],
+                "name": "output_0"
+            }
+        ]
+    }
+}

@@ -10,9 +10,9 @@ sudo apt-get update
 sudo apt-get install libhdf5-serial-dev hdf5-tools libhdf5-dev zlib1g-dev zip libjpeg8-dev liblapack-dev libblas-dev gfortran
 sudo apt-get install libopenblas-dev
 
-# NVIDIA Jetpack's Python does not have built-in venv and pip by default
-sudo apt-get install python3-venv python3-pip
-sudo pip3 install -U pip testresources setuptools
+# NVIDIA Jetpack's Python does not have built-in venv and pip by default
+sudo apt-get install python3-venv python3-pip libgoogle-glog-devsudo 
+pip3 install -U pip testresources setuptools
 ```
 
 ## 2. Install and check Jetson Stats
@@ -23,7 +23,6 @@ sudo jtop
 ```
 
 ## 3. Build CMake 
-
 It is not required if you install it as Option 1 in the Build DLR section. However, other packages may need to be compiled in the future, so it is recommended to install them beforehand.
 ```bash
 sudo apt-get install libssl-dev
@@ -36,7 +35,6 @@ sudo make install
 ```
 
 ## 4. Install numpy & libcanberra
-
 [Note] Please do not use the latest version of numpy, be sure to specify 1.19.x, such as 1.19.4 and 1.19.5. Using the latest version(>=1.2.0) throws a Python 3.7 dependency error when installing DLR.
 
 ```bash
@@ -84,7 +82,6 @@ gst-launch-1.0 nvcamerasrc auto-exposure=1 exposure-time=.0005 ! nvoverlaysink
 ```
 
 ### Check OpenCV
-
 - Save the code below as simple_camera.py and run python3 simple_camera.py,
     - simple_camera.py (https://raw.githubusercontent.com/JetsonHacksNano/CSI-Camera/master/simple_camera.py)
 ```python
