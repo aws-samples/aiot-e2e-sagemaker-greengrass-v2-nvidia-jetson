@@ -32,7 +32,7 @@ def parser_args(train_notebook=False):
     # Hyperparameter Setting
     parser.add_argument('--model_name', type=str, default='mobilenetv2')
     parser.add_argument('--lr', type=float, default=0.001)
-    parser.add_argument('--num_workers', type=int, default=4)
+    parser.add_argument('--num_workers', type=int, default=0)
     parser.add_argument('--num_epochs', type=int, default=10)
     parser.add_argument('--batch_size', type=int, default=128)
 

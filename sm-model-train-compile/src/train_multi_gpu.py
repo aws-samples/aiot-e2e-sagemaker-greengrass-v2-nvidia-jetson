@@ -290,7 +290,7 @@ def parser_args():
     # Hyperparameter Setting
     parser.add_argument('--model_name', type=str, default='mobilenetv2')
     parser.add_argument('--lr', type=float, default=0.001)
-    parser.add_argument('--num_workers', type=int, default=4)
+    parser.add_argument('--num_workers', type=int, default=0)
     parser.add_argument('--num_epochs', type=int, default=3)
     parser.add_argument('--batch_size', type=int, default=128)
     parser.add_argument('--apex', type=bool, default=False)
