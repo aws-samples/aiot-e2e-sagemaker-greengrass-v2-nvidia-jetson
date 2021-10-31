@@ -1,0 +1,27 @@
+{
+    "Project": {
+        "Name": "MLInferenceFromScratch",
+        "Account": "1234512345123",
+        "Region": "us-east-1",
+        "Profile": "ggv2-demo"
+    },
+    "Component": {
+        "ComponentName": "com.example.ImgClassification",
+        "ComponentVersion": "1.0.1",
+        "SendMessage": "True",
+        "Topic": "ml/example/imgclassification",
+        "PredictionIntervalSecs": 3,
+        "Timeout": 10
+    },
+    "Artifacts": {
+        "S3Bucket": "[YOUR-S3-BUCKET]",
+        "S3Prefix": "ggv2/artifacts",
+        "ZipArchiveName": "my-model"
+    },
+    "Parameters": {
+        "UseGPU": 0,
+        "ScoreThreshold": 0.25,
+        "MaxNumClasses": 3,
+        "ModelInputShape": "(224,224)"
+    }
+}

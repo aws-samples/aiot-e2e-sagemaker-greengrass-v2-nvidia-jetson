@@ -1,0 +1,1 @@
+{"torch_version": "1.6.0", "target": "cpu", "container_uri": "<aws_account_id>.dkr.ecr.<aws_region>.amazonaws.com/sagemaker-inference-pytorch:1.6.0-cpu-py3"}
