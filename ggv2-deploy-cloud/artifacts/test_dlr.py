@@ -1,28 +1,28 @@
-import dlr
+import logging, sys
 import cv2
+import glob
+import json
 import numpy as np
+import dlr
 from dlr import DLRModel
 
 
-label_map = {
-    0: 'brown_abnormal_chinese',
-    1: 'brown_abnormal_korean',
-    2: 'brown_normal_chinese',
-    3: 'brown_normal_korean',
-    4: 'no_box',
-    5: 'red_abnormal',
-    6: 'red_normal'
-}
+def load_classes_dict(filename='classes_dict.json'):
+    with open(filename, 'r') as fp:
+        classes_dict = json.load(fp)
+
+    classes_dict = {int(k):v for k,v in classes_dict.items()}        
+    return classes_dict
+    
+
+def load_image(image_path):
+    image_data = cv2.imread(image_path)
+    image_data = cv2.cvtColor(image_data, cv2.COLOR_BGR2RGB)
+    return image_data
 
 
-def softmax(x):
-    x_exp = np.exp(x - np.max(x))
-    f_x = x_exp / np.sum(x_exp)
-    return f_x
-
-
-def preprocess_image(image):
-    cvimage = cv2.resize(image, (224,224))
+def preprocess_image(image, image_shape=(224,224)):
+    cvimage = cv2.resize(image, image_shape)
     img = np.asarray(cvimage, dtype='float32')
     img /= 255.0 # scale 0 to 1
     mean = np.array([0.485, 0.456, 0.406]) 
@@ -33,17 +33,33 @@ def preprocess_image(image):
     return img
 
 
-image_data = cv2.imread('sample_images/brown_normal_korean.jpeg')
-image_data = cv2.cvtColor(image_data, cv2.COLOR_BGR2RGB)
-image_data = preprocess_image(image_data)
-device = 'cpu'            
+def softmax(x):
+    x_exp = np.exp(x - np.max(x))
+    f_x = x_exp / np.sum(x_exp)
+    return f_x
 
+
+device = 'cpu'
 model = DLRModel(f'model_{device}', device)
-output = model.run(image_data)  
-probs = softmax(output[0][0])
-sort_classes_by_probs = np.argsort(probs)[::-1]
+sample_image_dir = 'sample_images'
+classes_dict = load_classes_dict('classes_dict.json')
 
-idx = sort_classes_by_probs[0]
-msg = f'predicted = {label_map[idx]}, {probs[idx]*100:.2f}%'
-print('ground_truth = brown_normal_korean')
-print(msg)
+extensions = (f"{sample_image_dir}/*.jpg", f"{sample_image_dir}/*.jpeg")
+img_filelist = [f for f_ in [glob.glob(e) for e in extensions] for f in f_]
+print(img_filelist)
+
+for img_filepath in img_filelist:
+    ground_truth = img_filepath.split('/')[-1]
+    img = load_image(img_filepath)
+    img_data = preprocess_image(img)
+    
+    output = model.run(img_data)  
+    probs = softmax(output[0][0])
+    sort_classes_by_probs = np.argsort(probs)[::-1]
+
+    idx = sort_classes_by_probs[0]
+    print("+"*80)
+    print(f'predicted = {classes_dict[idx]}, {probs[idx]*100:.2f}%')
+    print(f'ground_truth = {ground_truth}')  
+    
+
