@@ -32,7 +32,7 @@ def parser_args(train_notebook=False):
     # Hyperparameter Setting
     parser.add_argument('--model_name', type=str, default='mobilenetv2')
     parser.add_argument('--lr', type=float, default=0.001)
-    parser.add_argument('--num_workers', type=int, default=0)
+    parser.add_argument('--num_workers', type=int, default=4)
     parser.add_argument('--num_epochs', type=int, default=10)
     parser.add_argument('--batch_size', type=int, default=128)
 
@@ -99,6 +99,7 @@ def trainer(current_gpu, model, dataloaders, transforms, args):
 
             running_loss = 0.0
             running_corrects = 0
+            running_num_samples = 0
             epoch_tic = time.time()            
             tic = time.time()        
 
@@ -122,6 +123,8 @@ def trainer(current_gpu, model, dataloaders, transforms, args):
 
                 running_loss += loss.item() * inputs.size(0)
                 running_corrects += torch.sum(preds == labels.data)
+                running_num_samples += inputs.size(0)
+                
                 acc1 = train_utils.accuracy(outputs, labels, topk=(1,)) 
 
                 losses.update(train_utils.to_python_float(loss.data), inputs.size(0))
@@ -129,13 +132,11 @@ def trainer(current_gpu, model, dataloaders, transforms, args):
                 batch_time.update(time.time() - tic)
                 tic = time.time()
 
-                if phase == 'train' and i % 10 == 0:
-                    step_loss = running_loss / ((i+1)*inputs.size(0))
-                    step_acc = running_corrects.double() / ((i+1)*inputs.size(0))
-
+                if phase == 'train' and i % args.log_interval == 1:
+                    step_loss = running_loss / running_num_samples
+                    step_acc = running_corrects.double() / running_num_samples
                     logger.info(f'[Epoch {epoch}/{num_epochs}, Step {i+1}/{num_steps[phase]}] {phase}-acc: {step_acc:.4f}, '
                              f'{phase}-loss: {step_loss:.4f}, data-time: {data_time.val:.4f}, batch-time: {batch_time.val:.4f}')            
-
             logger.info(f'[Epoch {epoch}/{num_epochs}] {phase}-acc: {top1.avg:.4f}, '
                          f'{phase}-loss: {losses.val:.4f}, time: {time.time()-epoch_tic:.4f}') 
 
@@ -181,7 +182,7 @@ if __name__ == '__main__':
     args.device = torch.device("cuda" if args.use_cuda else "cpu")
     args.rank = 0
     args.world_size = 1
-        
+    
     os.makedirs(args.model_chkpt_dir, exist_ok=True)
     os.makedirs(args.model_dir, exist_ok=True)
 

@@ -140,7 +140,7 @@ def trainer(current_gpu, model, dataloaders, transforms, args):
                 if phase == 'valid':
                     example_images.append(wandb.Image(inputs[0], caption="epoch:{}, pred:{}, truth:{}".format(epoch, preds[0].item(), labels[0])))
 
-                if phase == 'train' and i % args.log_interval == 0:
+                if phase == 'train' and i % args.log_interval == 1:
                     step_loss = running_loss / ((i+1)*inputs.size(0))
                     step_acc = running_corrects.double() / ((i+1)*inputs.size(0))
 
