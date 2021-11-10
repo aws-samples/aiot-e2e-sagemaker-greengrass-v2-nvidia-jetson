@@ -7,7 +7,7 @@ This hands-on lab starts with Machine Learning(Hereinafter referred to as ML) st
 - `sm-model-train-compile`: ML part (Amazon SageMaker)
 - `ggv2-deploy-on-device`: IoT part (AWS IoT Greengrass 2.0, when deployed to on-device)
 - `ggv2-deploy-on-cloud`: IoT part (AWS IoT Greengrass 2.0, when deploying to cloud instance)
-- 
+ 
 `ggv2-deploy-on-cloud` is used for IoT/ML workshops.
 
 ## 1. ML Part: Compile your ML model using Pytorch Framework and Amazon SageMaker
