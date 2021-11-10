@@ -5,7 +5,10 @@
 이 핸즈은랩은 데이터 준비, 모델 훈련 및 모델 컴파일과 같은 기본적인 머신 러닝(이하 ML) 절차와 NVIDIA Jetson nano 디바이스에서 Greengrass v2 컴포넌트 및 레시피를 밑바닥부터 생성하고 배포하는 방법을 다룹니다. 각 폴더는 독립적으로 실행할 수 있으며, 이미 모델을 컴파일한 경우 ML 파트를 생략할 수 있습니다.
 
 - `sm-model-train-compile`: ML part (Amazon SageMaker)
-- `ggv2-deploy-on-device`: IoT part (AWS IoT Greengrass 2.0)
+- `ggv2-deploy-on-device`: IoT part (AWS IoT Greengrass 2.0, 온디바이스에 배포 시)
+- `ggv2-deploy-on-cloud`: IoT part (AWS IoT Greengrass 2.0, 클라우드 인스턴스로 배포 시)
+
+`ggv2-deploy-on-cloud`는 IoT/ML 워크샵에 활용됩니다.
 
 ## 1. ML Part: Compile your ML model using Pytorch Framework and Amazon SageMaker
 
@@ -184,6 +187,7 @@ $ ./create_gg_component.sh
         </tr>
     </tbody>
 </table>
+
 
 ## License Summary
 

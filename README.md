@@ -5,7 +5,10 @@
 This hands-on lab starts with Machine Learning(Hereinafter referred to as ML) steps such as data preparing, model training, and model compiling, and then deals with creating and deploying Greengrass v2 components and recipes from scratch on NVIDIA Jetson nano devices. Each folder can be run independently, and you can omit ML Hands-on if you have already your own compiled models.
 
 - `sm-model-train-compile`: ML part (Amazon SageMaker)
-- `ggv2-deploy-on-device`: IoT part (AWS IoT Greengrass 2.0)
+- `ggv2-deploy-on-device`: IoT part (AWS IoT Greengrass 2.0, when deployed to on-device)
+- `ggv2-deploy-on-cloud`: IoT part (AWS IoT Greengrass 2.0, when deploying to cloud instance)
+- 
+`ggv2-deploy-on-cloud` is used for IoT/ML workshops.
 
 ## 1. ML Part: Compile your ML model using Pytorch Framework and Amazon SageMaker
 
