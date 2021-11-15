@@ -7,7 +7,7 @@
     },
     "Component": {
         "ComponentName": "com.example.ImgClassification",
-        "ComponentVersion": "1.0.1",
+        "ComponentVersion": "1.0.0",
         "SendMessage": "True",
         "Topic": "ml/example/imgclassification",
         "PredictionIntervalSecs": 3,
