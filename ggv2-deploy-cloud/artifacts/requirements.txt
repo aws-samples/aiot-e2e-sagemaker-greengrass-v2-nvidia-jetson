@@ -1,6 +1,6 @@
 wheel
 Cython
-numpy==1.19.5
+numpy==1.22.0
 opencv-python-headless==4.5.3.56
 dlr==1.8.0
 awsiotsdk
