@@ -6,9 +6,10 @@
 
 - `sm-model-train-compile`: ML part (Amazon SageMaker)
 - `ggv2-deploy-on-device`: IoT part (AWS IoT Greengrass 2.0, 온디바이스에 배포 시)
+- `ggv2-deploy-rasp4b`: IoT part (AWS IoT Greengrass 2.0, Raspberry Pi 4 - Model B에 배포 시)
 - `ggv2-deploy-on-cloud`: IoT part (AWS IoT Greengrass 2.0, 클라우드 인스턴스로 배포 시)
 
-`ggv2-deploy-on-cloud`는 IoT/ML 워크샵에 활용됩니다.
+보통 `ggv2-deploy-on-cloud` 폴더로 IoT/ML 워크샵을 진행하지만, 여러분께서 Raspberry Pi 4B가 있다면 `ggv2-deploy-rasp4b`로 진행 가능합니다
 
 ## 1. ML Part: Compile your ML model using Pytorch Framework and Amazon SageMaker
 
