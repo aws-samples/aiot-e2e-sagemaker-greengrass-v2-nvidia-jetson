@@ -33,10 +33,12 @@ def parse_result(result, classes_dict, img_path=None, show_img=True):
     return pred_cls_idx, pred_cls_str, prob
 
 
-def compile_model_for_jetson(role, bucket, target_device='jetson-nano',
-                             dataset_dir=None, framework='PYTORCH', 
-                             trt_ver='7.1.3', cuda_ver='10.2', gpu_code='sm_53',
-                             base_model_name='model', img_size=224, use_gpu=True):
+def compile_model_for_jetson(
+    role, bucket, target_device='jetson-nano',
+    dataset_dir=None, framework='PYTORCH', 
+    trt_ver='7.1.3', cuda_ver='10.2', gpu_code='sm_53',
+    base_model_name='model', img_size=224, use_gpu=True
+):
     if dataset_dir is None:
         print("[INFO] The dataset prefix of the s3 bucket is automatically assigned as 'modelzoo'.")
         dataset_dir = 'modelzoo'
@@ -103,9 +105,64 @@ def compile_model_for_jetson(role, bucket, target_device='jetson-nano',
     }
 
 
-def compile_model_for_cloud(role, bucket, target_device, 
-                            dataset_dir=None, framework='PYTORCH', framework_version='1.6',
-                            base_model_name='model', img_size=224):    
+def compile_model_for_rasp(
+    role, bucket, target_device, 
+    dataset_dir=None, framework='PYTORCH', framework_version='1.8',
+    base_model_name='model', img_size=224
+):    
+    valid_target_device = ['rasp3b', 'rasp4b']
+    
+    if not target_device in valid_target_device:
+        print('[ERROR] Please use valid target device!')
+        return
+    
+    if dataset_dir is None:
+        print("[INFO] The dataset prefix of the s3 bucket is automatically assigned as 'modelzoo'.")
+        dataset_dir = 'modelzoo'
+            
+    sm_client = boto3.client('sagemaker')
+    sess = sagemaker.Session()
+    region = sess.boto_region_name
+
+    compilation_job_name = name_from_base(f'{target_device}-{base_model_name}-pytorch')        
+    
+    s3_compiled_model_path = 's3://{}/{}/{}/neo-output'.format(bucket, dataset_dir, compilation_job_name)
+    key_prefix = f'{dataset_dir}/{compilation_job_name}/model'
+    s3_model_path = sess.upload_data(path='model.tar.gz', key_prefix=key_prefix)
+
+    input_config = {
+        'S3Uri': s3_model_path,
+        'DataInputConfig': f'{{"input0": [1,3,{img_size},{img_size}]}}',
+        'Framework': framework,
+        'FrameworkVersion': framework_version
+    }
+    output_config = {
+        'TargetDevice': target_device,        
+        'S3OutputLocation': s3_compiled_model_path,    
+    }        
+
+    # Create Compilation job    
+    compilation_response = sm_client.create_compilation_job(
+        CompilationJobName=compilation_job_name,
+        RoleArn=role,
+        InputConfig=input_config,
+        OutputConfig=output_config,
+        StoppingCondition={ 'MaxRuntimeInSeconds': 900 }
+    )
+    
+    return {
+        'response': compilation_response,
+        'job_name': compilation_job_name, 
+        's3_compiled_model_path': s3_compiled_model_path, 
+        's3_model_path': s3_model_path
+    }
+
+
+def compile_model_for_cloud(
+    role, bucket, target_device, 
+    dataset_dir=None, framework='PYTORCH', framework_version='1.8',
+    base_model_name='model', img_size=224
+):    
     valid_target_device = ['ml_m4', 'ml_m5', 
                            'ml_c4', 'ml_c5', 
                            'ml_p2', 'ml_p3', 'ml_g4dn', 

@@ -54,9 +54,9 @@ def transform_fn(model, payload, request_content_type='application/octet-stream'
         transforms.CenterCrop(224),
         transforms.ToTensor(),
         transforms.Normalize(
-            mean=[
-                0.485, 0.456, 0.406], std=[
-                0.229, 0.224, 0.225]),
+            mean=[0.485, 0.456, 0.406], 
+            std=[0.229, 0.224, 0.225]
+        ),
     ])
     normalized = preprocess(decoded)
     batchified = normalized.unsqueeze(0)

@@ -1,0 +1,33 @@
+{
+    "Requirements": {
+        "TargetDevice": "RASP4B",
+        "TargetDeviceType": "cpu"
+    },
+    "Compilation": {
+        "CreatedTime": 1664457092.871334
+    },
+    "Model": {
+        "Inputs": [
+            {
+                "name": "input0",
+                "shape": [
+                    1,
+                    3,
+                    224,
+                    224
+                ],
+                "dtype": "float32"
+            }
+        ],
+        "Outputs": [
+            {
+                "dtype": "float32",
+                "shape": [
+                    1,
+                    7
+                ],
+                "name": "output_0"
+            }
+        ]
+    }
+}
