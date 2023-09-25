@@ -10,6 +10,8 @@ echo $thispath
 cd $thispath
 echo '====== Install Dependencies ======' 
 
+[ -d "gcv" ] && rm -rf gcv
+
 python3 -m venv gcv
 source gcv/bin/activate
 
