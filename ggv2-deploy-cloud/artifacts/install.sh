@@ -10,7 +10,7 @@ echo $thispath
 cd $thispath
 echo '====== Install Dependencies ======' 
 
-python3 -m venv gcv
+python3 -m venv
 source gcv/bin/activate
 
 pip3 install pip --upgrade
